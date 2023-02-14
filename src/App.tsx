@@ -23,19 +23,21 @@ export const Listing: React.FunctionComponent = () => {
     return <div className="App">
         <Header/>
         <Content>
-            bla<br/>
-            Anzahl an Fragen: {questions.length} <br/>
-            Titel der Fragen: {questions.map((x) => <>
-            <div className ="card  box-padding items-start flex" style={{width: "36rem"}}>
-                <div className="card-body shadow-lg">
-                    <h3 className="card-title">{x.title}</h3>
-                    {x.author && <h4 className ="card-subtitle mb-2 text-muted"> Frage gestellt von {x.author.displayedName}</h4>}
-                    {!x.author && <h5 className ="card-subtitle mb-2 text‚ds-muted">Anonym</h5>}
-                    <div id="Frage" dangerouslySetInnerHTML={{__html: x.htmlBody}}/>
-                    <div>Antworten: {x.answerCount}</div>
+            {questions.map((x) => <>
+                <div className="card  box-padding items-start flex" style={{width: "36rem"}}>
+                    <div className="card-body shadow-lg">
+                        <h3 className="card-title">{x.title}</h3>
+                        {x.questionTags.map((x1) =>
+                            <>{x1.tag && x1.tag.name}, </>
+                        )}
+                        {x.author && <h4 className="card-subtitle mb-2 text-muted"> Frage gestellt
+                            von {x.author.displayedName}</h4>}
+                        {!x.author && <h5 className="card-subtitle mb-2 text‚ds-muted">Anonym</h5>}
+                        <div id="Frage" dangerouslySetInnerHTML={{__html: x.htmlBody}}/>
+                        <div className="Antworten"> Antworten: {x.answerCount}</div>
+                    </div>
                 </div>
-            </div>
-            <br/> </>)}‚
+                <br/> </>)}‚
         </Content>
     </div>;
 }
