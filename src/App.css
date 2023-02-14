@@ -1,5 +1,39 @@
 .App {
-  background-color: #f3f3f3;
-  color: #222223;
-  min-height: 100vh;
+    background-color: #f3f3f3;
+    color: #222223;
+    min-height: 100vh;
+}
+
+.card-body, ::after, ::before {
+    color: #000000;
+
+    background-color: #edf2f7;
+    /*min-width: 200px;
+    max-width: fit-content;*/
+    /* border things */
+    box-sizing: border-box;
+    border-width: 1rem;
+    border-style: solid;
+    border-color: #edf2f7;
+    border-radius: 0.5rem;
+}
+
+.box-padding {
+    padding: 1.5rem 1rem;
+}
+
+.card {
+    background-color: #f3f3f3;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.flex {
+    display: flex;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
 }
