@@ -26,7 +26,7 @@ export const Listing: React.FunctionComponent = () => {
 
         <Content>
             {question && <div>
-                <button onClick={() => setQuestion(undefined)}>Zurück</button>
+                <button className="zurückButton" onClick={() => setQuestion(undefined)}> Zurück</button>
 
                 {question.questionTags.map((x1, index) =>
                     <>{x1.tag && x1.tag.name}
@@ -39,6 +39,7 @@ export const Listing: React.FunctionComponent = () => {
                     <div className="card-body shadow-lg">
                         <div className="Time">{question.createdAt.substring(0, 10)} </div>
                         <h3 className="card-title">{question.title}</h3>
+                        <img src={question.author?.avatar?.urls.nmmslarge} className="author-logo" alt="" width="60"/>
                         {question.author && <h4 className="card-subtitle mb-2 text-muted username"> Frage gestellt
                             von {question.author.displayedName}</h4>}
                         {!question.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
@@ -50,6 +51,8 @@ export const Listing: React.FunctionComponent = () => {
                 {question.answers.map((answer) => <>
                     <div className="card  box-padding items-start flex qdp">
                         <div className="card-body shadow-lg">
+                            <img src={answer.author?.avatar?.urls.nmmslarge} className="comment-logo" alt=""
+                                 width="60"/>
                             {answer.author &&
                                 <h4 className="card-subtitle mb-2 text-muted username"> {answer.author.displayedName}</h4>}
                             {!answer.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
@@ -83,9 +86,10 @@ export const Listing: React.FunctionComponent = () => {
                                 {index == x.questionTags.length - 1 && <>.</>}
                             </>
                         )}
-                        {x.author && <h4 className="card-subtitle mb-2 text-muted"> Frage gestellt
-                            von {x.author.displayedName}</h4>}
-                        {!x.author && <h5 className="card-subtitle mb-2 text‚ds-muted">Anonym</h5>}
+                        <img src={x.author?.avatar?.urls.nmmslarge} className="author-logo" alt="" width="60"/>
+                        {x.author &&
+                            <h4 className="card-subtitle mb-2 text-muted username">{x.author.displayedName}</h4>}
+                        {!x.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
                         <div id="Frage" dangerouslySetInnerHTML={{__html: x.htmlBody}}/>
                         <div style={{fontSize: "small", color: "gray"}}> Antworten: {x.answerCount}</div>
                     </div>

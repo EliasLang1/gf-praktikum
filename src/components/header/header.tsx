@@ -8,7 +8,7 @@ import logo from "../../assets/brand-symbol.svg";
 export const Header: React.FunctionComponent = () => {
   return (
     <div className="Header">
-      <img src={logo} className="Header-logo" alt="" />
+      <img src={logo} className="Header-logo" alt=""/>
     </div>
   );
 };

@@ -31,6 +31,9 @@
 .card-title:hover{
     text-decoration: underline;
 }
+.card{
+    cursor: pointer;
+}
 
 .box-padding {
     padding: 1.5rem 1rem;
@@ -58,7 +61,15 @@
 .flex {
     display: flex;
 }
-
+.zurückButton{
+    background-color: #49a0cc;
+    border: none;
+    color: #f3f3f3;
+    font-size: medium;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    cursor: pointer;
+}
 .shadow-lg {
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
 }
