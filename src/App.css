@@ -17,17 +17,35 @@
     border-color: #ffffff;
     border-radius: 0.5rem;
 }
+.qdp{
+    align-self: center;
+}
 .Tags{
     color: darkslategray;
 
+}
+.card-title{
+    color: #222223;
+    text-decoration: none;
+}
+.card-title:hover{
+    text-decoration: underline;
 }
 
 .box-padding {
     padding: 1.5rem 1rem;
 }
-.Antworten{
+.antwortenAnzahl{
+    color: darkslategray;
+    font-size: large;
+}
+.Time{
+    text-align: right;
     color: darkslategray;
     font-size: small;
+}
+.username{
+    color: #49a0cc;
 }
 .card {
     background-color: #f3f3f3;
