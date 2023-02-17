@@ -73,11 +73,11 @@ export const Listing: React.FunctionComponent = () => {
             {question && <div>
                 <button className="zurückButton" onClick={() => setQuestion(undefined)}> Zurück</button>
                 <div className="qdp flex">
-                    {question.questionTags.map((x1, index) =>
-                        <>{x1.tag && x1.tag.name}
-                            {index != question.questionTags.length - 1 && <>, </>}
-                            {index == question.questionTags.length - 1 && <>.</>}
-                        </>
+                    {question.questionTags.map((x1) =>
+                        <button className="zurückButton"
+                                onClick={() =>{setFilter(x1.tag?.name);setQuestion(undefined)}}>
+                            {x1.tag?.name}
+                        </button>
                     )}
                 </div>
                 <div className="card  box-padding items-start flex qdp">
@@ -145,11 +145,14 @@ export const Listing: React.FunctionComponent = () => {
                 </button>
                 <button className="zurückButton" onClick={() => setCurrentQuestions(sortedQuestionsLength)}>Länge
                 </button>
+                <p className="grauGroß">Filter nach:</p>
                 {sortedTags.map(tag =>
                     <button className={filter == tag[0] ? "topTags zurückButton ausgewählt" : "topTags zurückButton"}
                             onClick={() => setFilter(filter == tag[0] ? undefined : tag[0])}>
                         {tag[0]}: {tag[1]}
                     </button>)}
+                <button className="zurückButton" onClick={() => setFilter(undefined)}>Filter entfernen
+                </button>
             </div>
             }
 
