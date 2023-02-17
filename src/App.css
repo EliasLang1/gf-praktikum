@@ -96,9 +96,12 @@ img {
     font-size: medium;
     padding: 1rem 1.5rem;
     border-radius: 1rem;
-    cursor: pointer;
+    cursor: none;
     margin-right: 5px;
     margin-bottom: 5px;
+}
+.ausgewählt{
+    background-color: #8b4d40;
 }
 .hilfreich-button{
     border: none;
@@ -112,7 +115,7 @@ button{
 }
 button.hover{
     background-color: #316d8b;
-    cursor: pointer;
+    cursor: none;
 }
 .shadow-lg {
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);

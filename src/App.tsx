@@ -4,13 +4,15 @@ import './App.css';
 import exampleData from './data/sample.json';
 import {Header} from "./components/header/header";
 import {Content} from "./components/content/content";
-import {ExampleData, ExampleData_questions_stream_latestByTag_questions} from "./react-app-env";
+import {
+    ExampleData,
+    ExampleData_questions_stream_latestByTag_questions,
+} from "./react-app-env";
 
 /**
  * Type alias for generated question type.
  */
 type Question = ExampleData_questions_stream_latestByTag_questions;
-
 /**
  * List of 100 example questions including answers and comments.
  */
@@ -22,7 +24,7 @@ for (const question of questions) {
         if (allTags.get(tag.tag?.name) > 0)
             allTags.set(tag.tag?.name, allTags.get(tag.tag?.name) + 1);
         else {
-            allTags.set(tag.tag?.name,1);
+            allTags.set(tag.tag?.name, 1);
         }
     }
 }
@@ -55,17 +57,19 @@ const sortedQuestionsLength = [...questions].sort((a, b) => a.htmlBody.length - 
 export const Listing: React.FunctionComponent = () => {
     const [question, setQuestion] = useState<Question | undefined>(undefined);
     const [currentQuestions, setCurrentQuestions] = useState<Question[]>(questions);
+    const [filter, setFilter] = useState<string | undefined>(undefined);
+    const filterByTag = (q: Question): boolean => {
 
-    function updateFilter(q: Question[]) {
-        setCurrentQuestions(q);
+        return !filter || q.questionTags.some(tag => tag.tag?.name == filter);
     }
+
     const tags = Array.from(allTags.entries())
-    const sortedTags = [...tags].sort((a,b) =>-a[1]+b[1]).splice(10, tags.length-10)
+    const sortedTags = tags.sort((a, b) => -a[1] + b[1]).splice(1, 11)
     return <div className="App">
         <Header/>
 
         <Content>
-            <div>{tags.map(tag => <div> {tag[0]}, {tag[1]}</div>)}</div>
+
             {question && <div>
                 <button className="zurückButton" onClick={() => setQuestion(undefined)}> Zurück</button>
                 <div className="qdp flex">
@@ -130,13 +134,26 @@ export const Listing: React.FunctionComponent = () => {
                 <br/>
             </div>}
 
-            {!question && <div><p className="grauGroß">Sortiere nach:</p>
-                <button className="zurückButton" onClick={() => updateFilter(sortedQuestionsTime)}>Zeit</button>
-                <button className="zurückButton" onClick={() => updateFilter(sortedQuestionsAnswers)}>Antworten</button>
-                <button className="zurückButton" onClick={() => updateFilter(sortedQuestionsLength)}>Länge</button>
+            {!question && <div>
+                <div>
+
+                </div>
+                <p className="grauGroß">Sortiere nach:</p>
+
+                <button className="zurückButton" onClick={() => setCurrentQuestions(sortedQuestionsTime)}>Zeit</button>
+                <button className="zurückButton" onClick={() => setCurrentQuestions(sortedQuestionsAnswers)}>Antworten
+                </button>
+                <button className="zurückButton" onClick={() => setCurrentQuestions(sortedQuestionsLength)}>Länge
+                </button>
+                {sortedTags.map(tag =>
+                    <button className={filter == tag[0] ? "topTags zurückButton ausgewählt" : "topTags zurückButton"}
+                            onClick={() => setFilter(filter == tag[0] ? undefined : tag[0])}>
+                        {tag[0]}: {tag[1]}
+                    </button>)}
             </div>
             }
-            {!question && currentQuestions.map((x) => <>
+
+            {!question && currentQuestions.filter(filterByTag).map((x) => <>
 
                 <div className="card  box-padding items-start flex question" onClick={() => setQuestion(x)}
                      style={{width: "36rem"}}>
