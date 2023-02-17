@@ -15,48 +15,102 @@ type Question = ExampleData_questions_stream_latestByTag_questions;
  * List of 100 example questions including answers and comments.
  */
 const questions: Question[] = ((exampleData as unknown) as ExampleData).questions.stream.latestByTag.questions;
+const allTags = new Map();
+for (const question of questions) {
+
+    for (const tag of question.questionTags) {
+        if (allTags.get(tag.tag?.name) > 0)
+            allTags.set(tag.tag?.name, allTags.get(tag.tag?.name) + 1);
+        else {
+            allTags.set(tag.tag?.name,1);
+        }
+    }
+}
+
+const sortedQuestionsTime = [...questions].sort((a, b) => {
+    const nameA = new Date(a.createdAt);
+    const nameB = new Date(b.createdAt);
+    if (nameA < nameB) {
+        return -1;
+    }
+    if (nameA > nameB) {
+        return 1;
+    }
+    return 0;
+});
+const sortedQuestionsAnswers = [...questions].sort((a, b) => {
+    if (a.answers.length > b.answers.length) {
+        return -1;
+    }
+    if (a.answers.length < b.answers.length) {
+        return 1;
+    }
+    return 0;
+});
+const sortedQuestionsLength = [...questions].sort((a, b) => a.htmlBody.length - b.htmlBody.length)
 
 /**
  * Component showing a list of questions
  */
 export const Listing: React.FunctionComponent = () => {
     const [question, setQuestion] = useState<Question | undefined>(undefined);
+    const [currentQuestions, setCurrentQuestions] = useState<Question[]>(questions);
+
+    function updateFilter(q: Question[]) {
+        setCurrentQuestions(q);
+    }
+    const tags = Array.from(allTags.entries())
+    const sortedTags = [...tags].sort((a,b) =>-a[1]+b[1]).splice(10, tags.length-10)
     return <div className="App">
         <Header/>
 
         <Content>
+            <div>{tags.map(tag => <div> {tag[0]}, {tag[1]}</div>)}</div>
             {question && <div>
                 <button className="zurückButton" onClick={() => setQuestion(undefined)}> Zurück</button>
-
-                {question.questionTags.map((x1, index) =>
-                    <>{x1.tag && x1.tag.name}
-                        {index != question.questionTags.length - 1 && <>, </>}
-                        {index == question.questionTags.length - 1 && <>.</>}
-                    </>
-                )}
-
+                <div className="qdp flex">
+                    {question.questionTags.map((x1, index) =>
+                        <>{x1.tag && x1.tag.name}
+                            {index != question.questionTags.length - 1 && <>, </>}
+                            {index == question.questionTags.length - 1 && <>.</>}
+                        </>
+                    )}
+                </div>
                 <div className="card  box-padding items-start flex qdp">
                     <div className="card-body shadow-lg">
-                        <div className="Time">{question.createdAt.substring(0, 10)} </div>
+                        <div className="Time">{new Date(question.createdAt).toLocaleString('de-DE', {
+                            day: "numeric",
+                            month: "numeric",
+                            year: "numeric"
+                        })} </div>
                         <h3 className="card-title">{question.title}</h3>
-                        <img src={question.author?.avatar?.urls.nmmslarge} className="author-logo" alt="" width="60"/>
-                        {question.author && <h4 className="card-subtitle mb-2 text-muted username"> Frage gestellt
-                            von {question.author.displayedName}</h4>}
-                        {!question.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
+                        <div className="user-container">
+                            <img src={question.author?.avatar?.urls.nmmslarge} className="author-pb" alt=""
+                                 width="60"/>
+                            {question.author &&
+                                <h4 className="card-subtitle mb-2 text-muted username">  {question.author.displayedName}</h4>}
+                            {!question.author && <h5 className="card-subtitle mb-2 text‚ds-muted username"> Anonym</h5>}
+                        </div>
                         <div id="Frage" dangerouslySetInnerHTML={{__html: question.htmlBody}}/>
                     </div>
                 </div>
-                {question.answerCount != 1 && <p className="antwortenAnzahl">{question.answerCount} Antworten </p>}
-                {question.answerCount == 1 && <p className="antwortenAnzahl">Eine Antwort </p>}
+                {question.answerCount != 1 && <p className="grauGroß">{question.answerCount} Antworten </p>}
+                {question.answerCount == 1 && <p className="grauGroß">Eine Antwort </p>}
+                {question.answers.sort((a, b) => -a.userSatisfaction.counts.positive + b.userSatisfaction.counts.positive).length}
                 {question.answers.map((answer) => <>
                     <div className="card  box-padding items-start flex qdp">
                         <div className="card-body shadow-lg">
-                            <img src={answer.author?.avatar?.urls.nmmslarge} className="comment-logo" alt=""
-                                 width="60"/>
-                            {answer.author &&
-                                <h4 className="card-subtitle mb-2 text-muted username"> {answer.author.displayedName}</h4>}
-                            {!answer.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
+                            <div className="user-container">
+                                <img src={answer.author?.avatar?.urls.nmmslarge} className="comment-pb" alt=""
+                                     width="60"/>
+                                {answer.author &&
+                                    <h4 className="card-subtitle mb-2 text-muted username"> {answer.author.displayedName}</h4>}
+                                {!answer.author &&
+                                    <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
+                            </div>
                             <div id="Frage" dangerouslySetInnerHTML={{__html: answer.htmlBody}}/>
+                            <button
+                                className="hilfreich-button">Hilfreich: {answer.userSatisfaction.counts.positive}</button>
                             {answer.comments.map((comment) => <>
                                 <div className="card items-start flex">
                                     <div className="card-body shadow-lg">
@@ -65,6 +119,7 @@ export const Listing: React.FunctionComponent = () => {
                                         {!comment.author &&
                                             <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
                                         <div id="Frage" dangerouslySetInnerHTML={{__html: comment.htmlBody}}/>
+                                        <button className="hilfreich-button">&#x1F44D; {comment.voteCount}</button>
                                     </div>
                                 </div>
                             </>)}
@@ -74,11 +129,23 @@ export const Listing: React.FunctionComponent = () => {
 
                 <br/>
             </div>}
-            {!question && questions.map((x) => <>
-                <div className="card  box-padding items-start flex" onClick={() => setQuestion(x)}
+
+            {!question && <div><p className="grauGroß">Sortiere nach:</p>
+                <button className="zurückButton" onClick={() => updateFilter(sortedQuestionsTime)}>Zeit</button>
+                <button className="zurückButton" onClick={() => updateFilter(sortedQuestionsAnswers)}>Antworten</button>
+                <button className="zurückButton" onClick={() => updateFilter(sortedQuestionsLength)}>Länge</button>
+            </div>
+            }
+            {!question && currentQuestions.map((x) => <>
+
+                <div className="card  box-padding items-start flex question" onClick={() => setQuestion(x)}
                      style={{width: "36rem"}}>
                     <div className="card-body shadow-lg">
-                        <div className="Time">{x.createdAt.substring(0, 10)} </div>
+                        <div className="Time">{new Date(x.createdAt).toLocaleString('de-DE', {
+                            day: "numeric",
+                            month: "numeric",
+                            year: "numeric"
+                        })} </div>
                         <h3 className="card-title">{x.title}</h3>
                         {x.questionTags.map((x1, index) =>
                             <>{x1.tag && x1.tag.name}
@@ -86,10 +153,12 @@ export const Listing: React.FunctionComponent = () => {
                                 {index == x.questionTags.length - 1 && <>.</>}
                             </>
                         )}
-                        <img src={x.author?.avatar?.urls.nmmslarge} className="author-logo" alt="" width="60"/>
-                        {x.author &&
-                            <h4 className="card-subtitle mb-2 text-muted username">{x.author.displayedName}</h4>}
-                        {!x.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
+                        <div className="user-container">
+                            <img src={x.author?.avatar?.urls.nmmslarge} className="author-pb" alt="" width="60"/>
+                            {x.author &&
+                                <h4 className="card-subtitle mb-2 text-muted username">{x.author.displayedName}</h4>}
+                            {!x.author && <h5 className="card-subtitle mb-2 text‚ds-muted username">Anonym</h5>}
+                        </div>
                         <div id="Frage" dangerouslySetInnerHTML={{__html: x.htmlBody}}/>
                         <div style={{fontSize: "small", color: "gray"}}> Antworten: {x.answerCount}</div>
                     </div>

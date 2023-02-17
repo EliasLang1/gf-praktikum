@@ -17,39 +17,67 @@
     border-color: #ffffff;
     border-radius: 0.5rem;
 }
-.qdp{
+
+.qdp {
     align-self: center;
 }
-.Tags{
+
+.Tags {
     color: darkslategray;
 
 }
-.card-title{
+
+.card-title {
     color: #222223;
     text-decoration: none;
 }
-.card-title:hover{
-    text-decoration: underline;
-}
-.card{
+.question {
     cursor: pointer;
 }
 
 .box-padding {
-    padding: 1.5rem 1rem;
+    padding: 0.3rem 1rem;
+
 }
-.antwortenAnzahl{
+
+.grauGroß{
     color: darkslategray;
-    font-size: large;
+    font-size: x-large;
+    font-weight: bold;
 }
-.Time{
+
+.Time {
     text-align: right;
     color: darkslategray;
     font-size: small;
 }
-.username{
+
+.user-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.dropdown{
+    display: inline-block;
+    position: relative;
+}
+.dropdown-content{
+    display: none;
+    right: 0;
+    position: absolute;
+}
+.dropdown:hover .dropdown-content{
+    display: block;
+}
+img {
+    max-width: 100%;
+}
+
+.username {
     color: #49a0cc;
 }
+
 .card {
     background-color: #f3f3f3;
 }
@@ -61,13 +89,29 @@
 .flex {
     display: flex;
 }
-.zurückButton{
-    background-color: #49a0cc;
+
+.zurückButton {
     border: none;
     color: #f3f3f3;
     font-size: medium;
     padding: 1rem 1.5rem;
     border-radius: 1rem;
+    cursor: pointer;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.hilfreich-button{
+    border: none;
+    color: #f3f3f3;
+    font-size: medium;
+    padding: 0.8rem 0.7rem;
+    border-radius: 0.3rem;
+}
+button{
+    background-color: #49a0cc;
+}
+button.hover{
+    background-color: #316d8b;
     cursor: pointer;
 }
 .shadow-lg {
